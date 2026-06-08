@@ -1,1 +1,1415 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVMS Mastery Guide — EAC Management & Decision Intelligence</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 
+  :root {
+    --burgundy: #52211A;
+    --burgundy-light: #7a3028;
+    --gold: #A87605;
+    --gold-light: #d4a030;
+    --gold-pale: #f5e6b8;
+    --charcoal: #1a1a1a;
+    --charcoal-mid: #2a2a2a;
+    --charcoal-light: #3a3a3a;
+    --cream: #f8f4ee;
+    --warm-white: #fdfaf5;
+    --text-dark: #1e1e1e;
+    --text-mid: #4a4a4a;
+    --text-light: #7a7a7a;
+    --red-alert: #c0392b;
+    --green-ok: #1a6b3a;
+    --amber-warn: #b8860b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--charcoal);
+    color: var(--cream);
+    line-height: 1.6;
+  }
+
+  
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--charcoal) 0%, var(--burgundy) 60%, #3a1510 100%);
+    padding: 48px 40px 50px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--gold);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    border: 2px solid rgba(168,118,5,0.15);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 200px; height: 200px;
+    border: 1px solid rgba(168,118,5,0.1);
+    border-radius: 50%;
+  }
+   .hero-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 60px 40px;
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+  }
+  
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--cream);
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub {
+    font-size: 15px;
+    color: rgba(248,244,238,0.7);
+    max-width: 600px;
+    font-weight: 300;
+  }
+  .hero-badge {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 6px 16px;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+.hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: rgba(245,239,230,0.65);
+    font-weight: 300;
+    max-width: 560px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+  }
+  
+  .hero-cta-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--charcoal);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .btn-ghost {
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+  }
+
+  .btn-ghost:hover { opacity: 1; }
+  
+  /* ── NAV ── */
+  .nav-strip {
+    background: var(--charcoal-mid);
+    border-bottom: 1px solid var(--charcoal-light);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 16px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    display: none;
+    padding: 48px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+  .section-title span { color: var(--gold); }
+  .section-lead {
+    font-size: 15px;
+    color: rgba(248,244,238,0.65);
+    margin-bottom: 36px;
+    font-weight: 300;
+    max-width: 700px;
+  }
+
+  /* ── FORMULA CARDS ── */
+  .formula-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  .formula-card {
+    background: var(--charcoal-mid);
+    border: 1px solid var(--charcoal-light);
+    border-radius: 4px;
+    padding: 24px;
+    transition: border-color 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .formula-card:hover { border-color: var(--gold); }
+  .formula-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--gold);
+  }
+  .formula-card.critical::before { background: var(--red-alert); }
+  .formula-card.positive::before { background: var(--green-ok); }
+
+  .formula-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .formula-card.critical .formula-label { color: #e74c3c; }
+  .formula-card.positive .formula-label { color: #2ecc71; }
+
+  .formula-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+  .formula-equation {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--gold-light);
+    background: var(--charcoal);
+    padding: 8px 12px;
+    border-radius: 3px;
+    margin: 10px 0;
+  }
+  .formula-desc {
+    font-size: 13px;
+    color: rgba(248,244,238,0.6);
+    line-height: 1.5;
+  }
+
+  /* ── INTERPRETATION TABLE ── */
+  .interp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0 36px;
+    font-size: 14px;
+  }
+  .interp-table th {
+    background: var(--burgundy);
+    color: var(--gold-pale);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--gold);
+  }
+  .interp-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--charcoal-light);
+    color: rgba(248,244,238,0.8);
+    vertical-align: top;
+  }
+  .interp-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+  .interp-table tr:hover td { background: rgba(168,118,5,0.08); }
+
+  .status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .pill-red { background: rgba(192,57,43,0.2); color: #e74c3c; border: 1px solid rgba(192,57,43,0.4); }
+  .pill-amber { background: rgba(184,134,11,0.2); color: #f1c40f; border: 1px solid rgba(184,134,11,0.4); }
+  .pill-green { background: rgba(26,107,58,0.2); color: #2ecc71; border: 1px solid rgba(26,107,58,0.4); }
+  .pill-blue { background: rgba(41,128,185,0.2); color: #3498db; border: 1px solid rgba(41,128,185,0.4); }
+
+  /* ── EAC METHODS ── */
+  .eac-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+  .eac-card {
+    background: var(--charcoal-mid);
+    border: 1px solid var(--charcoal-light);
+    border-radius: 4px;
+    padding: 28px;
+  }
+  .eac-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .eac-method-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--charcoal-light);
+    line-height: 1;
+  }
+  .eac-tag { font-size: 12px; color: var(--gold); font-weight: 500; }
+  .eac-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+  .eac-formula {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--gold-light);
+    background: var(--charcoal);
+    padding: 8px 12px;
+    border-radius: 3px;
+    margin: 10px 0;
+  }
+  .eac-when {
+    font-size: 12px;
+    color: rgba(248,244,238,0.55);
+    line-height: 1.5;
+    margin-top: 10px;
+    border-top: 1px solid var(--charcoal-light);
+    padding-top: 10px;
+  }
+  .eac-when strong { color: var(--gold-light); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ── DECISION FRAMEWORK ── */
+  .decision-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 36px;
+  }
+  .decision-step {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 20px;
+    position: relative;
+  }
+  .decision-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 29px;
+    top: 60px;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), var(--charcoal-light));
+  }
+  .step-num {
+    width: 40px; height: 40px;
+    background: var(--burgundy);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+  }
+  .step-content {
+    background: var(--charcoal-mid);
+    border: 1px solid var(--charcoal-light);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .step-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+  .step-content p {
+    font-size: 13px;
+    color: rgba(248,244,238,0.65);
+    line-height: 1.6;
+  }
+  .step-actions {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .action-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .action-chip.red { border-color: #e74c3c; color: #e74c3c; }
+  .action-chip.green { border-color: #2ecc71; color: #2ecc71; }
+
+  /* ── CALC TOOL ── */
+  .calc-wrapper {
+    background: var(--charcoal-mid);
+    border: 1px solid var(--charcoal-light);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 36px;
+  }
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .calc-field label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .calc-field input {
+    width: 100%;
+    background: var(--charcoal);
+    border: 1px solid var(--charcoal-light);
+    border-radius: 3px;
+    padding: 10px 12px;
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .calc-field input:focus { border-color: var(--gold); }
+  .calc-btn {
+    background: var(--burgundy);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 24px;
+  }
+  .calc-btn:hover { background: var(--gold); color: var(--charcoal); }
+  .calc-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .result-card {
+    background: var(--charcoal);
+    border: 1px solid var(--charcoal-light);
+    border-radius: 3px;
+    padding: 16px;
+  }
+  .result-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-light);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .result-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--cream);
+  }
+  .result-value.good { color: #2ecc71; }
+  .result-value.warn { color: #f1c40f; }
+  .result-value.bad { color: #e74c3c; }
+  .result-interp {
+    font-size: 11px;
+    color: rgba(248,244,238,0.5);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .result-bar {
+    height: 3px;
+    background: var(--charcoal-light);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .result-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* ── VAC / TCPI section ── */
+  .callout {
+    background: linear-gradient(135deg, rgba(82,33,26,0.4), rgba(168,118,5,0.1));
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+  .callout-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .callout p {
+    font-size: 13px;
+    color: rgba(248,244,238,0.75);
+    line-height: 1.6;
+  }
+
+  /* ── PM CHECKLIST ── */
+  .checklist {
+    list-style: none;
+    margin-bottom: 36px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--charcoal-light);
+    font-size: 14px;
+    color: rgba(248,244,238,0.8);
+    line-height: 1.5;
+  }
+  .check-icon {
+    width: 22px; height: 22px;
+    border: 1.5px solid var(--gold);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .check-icon:hover { background: var(--gold); }
+  .check-icon.checked { background: var(--gold); }
+  .check-icon svg { width: 12px; height: 12px; opacity: 0; }
+  .check-icon.checked svg { opacity: 1; }
+  .check-text strong { color: var(--gold-light); font-weight: 600; }
+
+  /* ── RED FLAGS ── */
+  .flag-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .flag-card {
+    border-radius: 4px;
+    padding: 20px;
+    border: 1px solid;
+  }
+  .flag-card.red { background: rgba(192,57,43,0.1); border-color: rgba(192,57,43,0.4); }
+  .flag-card.amber { background: rgba(184,134,11,0.1); border-color: rgba(184,134,11,0.4); }
+  .flag-card.green { background: rgba(26,107,58,0.1); border-color: rgba(26,107,58,0.4); }
+  .flag-card h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .flag-card.red h4 { color: #e74c3c; }
+  .flag-card.amber h4 { color: #f1c40f; }
+  .flag-card.green h4 { color: #2ecc71; }
+  .flag-card p, .flag-card ul { font-size: 13px; color: rgba(248,244,238,0.7); line-height: 1.6; }
+  .flag-card ul { padding-left: 16px; }
+  .flag-card ul li { margin-bottom: 4px; }
+
+  /* ── FOOTER ── */
+  .guide-footer {
+    background: var(--charcoal-mid);
+    border-top: 1px solid var(--charcoal-light);
+    padding: 24px 40px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-light);
+  }
+  .guide-footer span { color: var(--gold); }
+
+  .footer .page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--gold);
+  }
+
+  .footer-brand span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-top: 4px;
+  }
+  
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-align: right;
+    line-height: 1.8;
+  }
+ 
+  /* accordion */
+  .accordion { margin-bottom: 12px; }
+  .accordion-header {
+    background: var(--charcoal-mid);
+    border: 1px solid var(--charcoal-light);
+    border-radius: 3px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--cream);
+    transition: border-color 0.2s;
+  }
+  .accordion-header:hover { border-color: var(--gold); }
+  .accordion-arrow { color: var(--gold); transition: transform 0.2s; font-size: 18px; }
+  .accordion-header.open .accordion-arrow { transform: rotate(180deg); }
+  .accordion-body {
+    display: none;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--charcoal-light);
+    border-top: none;
+    border-radius: 0 0 3px 3px;
+    padding: 20px 24px;
+    font-size: 13px;
+    color: rgba(248,244,238,0.72);
+    line-height: 1.7;
+  }
+  .accordion-body.open { display: block; }
+  .accordion-body ul { padding-left: 18px; margin-top: 8px; }
+  .accordion-body ul li { margin-bottom: 6px; }
+  .accordion-body strong { color: var(--gold-light); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 28px 20px 30px; }
+    .logo-zone-hero { width: 140px; height: 52px; }
+    .nav-strip { padding: 0 12px; }
+    .section { padding: 32px 20px; }
+    .calc-wrapper { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="logo-zone logo-zone-hero" title="Place Greater Ambitions LLC logo here"><a href='https://postimg.cc/bSYhPL8Q' target='_blank'><img src='https://i.postimg.cc/bSYhPL8Q/rev-Screenshot-2026-04-27-at-10-23-19-AM.png' border='0' alt='rev-Screenshot-2026-04-27-at-10-23-19-AM'></a></div>
+  <br><div class="hero-eyebrow">-- PM Intelligence Series</div>
+  <h1>Earned Value Management<br><span>Mastery Reference Guide</span></h1>
+  <p class="hero-sub">A practitioner's guide to EVMS fundamentals, EAC management, data interpretation, and decision-driving metrics — built for enterprise program leaders.</p>
+  <div class="hero-badge">Dr. Minina Johnson, DBA, PMP · Greater Ambitions LLC</div>
+   <div class="hero-cta-row">
+      <a href="#start" class="btn-primary">Read the Guide ↓</a>
+      <a href="#cta" class="btn-ghost">Book a Strategy Call →</a>
+    </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-strip">
+  <button class="nav-btn active" onclick="showSection('fundamentals', this)">01 · Fundamentals</button>
+  <button class="nav-btn" onclick="showSection('eac', this)">02 · EAC Methods</button>
+  <button class="nav-btn" onclick="showSection('interpret', this)">03 · Interpretation</button>
+  <button class="nav-btn" onclick="showSection('decisions', this)">04 · PM Decisions</button>
+  <button class="nav-btn" onclick="showSection('calculator', this)">05 · Calculator</button>
+  <button class="nav-btn" onclick="showSection('checklist', this)">06 · PM Checklist</button>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 1: FUNDAMENTALS                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="fundamentals" class="section active">
+  <div class="section-title">EVMS <span>Fundamentals</span></div>
+  <p class="section-lead">Earned Value Management System (EVMS) is a project management methodology that integrates scope, schedule, and cost — giving you one unified performance picture. Every metric flows from three data points.</p>
+
+  <!-- 3 core values -->
+  <div class="formula-grid">
+    <div class="formula-card positive">
+      <div class="formula-label">The Baseline</div>
+      <div class="formula-name">Planned Value (PV)</div>
+      <div class="formula-equation">PV = BAC × % Planned Complete</div>
+      <div class="formula-desc">Also called BCWS (Budgeted Cost of Work Scheduled). What you planned to accomplish by this point. This is your performance baseline — it comes from your PMB.</div>
+    </div>
+    <div class="formula-card positive">
+      <div class="formula-label">The Reality Check</div>
+      <div class="formula-name">Earned Value (EV)</div>
+      <div class="formula-equation">EV = BAC × % Actual Complete</div>
+      <div class="formula-desc">Also called BCWP (Budgeted Cost of Work Performed). The budget value of what you've actually accomplished. This is how EVMS "earns" value — tied to deliverables, not spend.</div>
+    </div>
+    <div class="formula-card critical">
+      <div class="formula-label">The Spend Reality</div>
+      <div class="formula-name">Actual Cost (AC)</div>
+      <div class="formula-equation">AC = Sum of all incurred costs</div>
+      <div class="formula-desc">Also called ACWP (Actual Cost of Work Performed). All costs actually incurred for the work performed — labor, material, ODC, subcontracts. No estimates. Real dollars spent.</div>
+    </div>
+  </div>
+
+  <!-- derived metrics -->
+  <div class="section-title" style="font-size:20px; margin-bottom: 8px;">Core <span>Performance Metrics</span></div>
+  <p class="section-lead" style="margin-bottom:20px;">Derived from PV, EV, and AC — these eight metrics tell the whole story.</p>
+  <div class="formula-grid">
+    <div class="formula-card">
+      <div class="formula-label">Schedule Performance</div>
+      <div class="formula-name">Schedule Variance (SV)</div>
+      <div class="formula-equation">SV = EV − PV</div>
+      <div class="formula-desc"><strong>Positive = ahead of schedule. Negative = behind.</strong> SV is in dollars, not days — it represents the cost value of schedule deviation. <em>Note: SV returns to zero at project completion regardless of actual schedule performance.</em></div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-label">Cost Performance</div>
+      <div class="formula-name">Cost Variance (CV)</div>
+      <div class="formula-equation">CV = EV − AC</div>
+      <div class="formula-desc"><strong>Positive = under budget. Negative = over budget.</strong> CV shows the difference between what you earned and what you spent. A persistent negative CV is the most critical red flag in EVMS.</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-label">Efficiency Index</div>
+      <div class="formula-name">Schedule Performance Index (SPI)</div>
+      <div class="formula-equation">SPI = EV ÷ PV</div>
+      <div class="formula-desc"><strong>&gt;1.0 = ahead. &lt;1.0 = behind. 1.0 = on track.</strong> SPI of 0.85 means you're getting $0.85 of work done for every $1.00 planned. Drives EAC calculations.</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-label">Efficiency Index</div>
+      <div class="formula-name">Cost Performance Index (CPI)</div>
+      <div class="formula-equation">CPI = EV ÷ AC</div>
+      <div class="formula-desc"><strong>&gt;1.0 = under budget. &lt;1.0 = over budget. 1.0 = on track.</strong> CPI of 0.90 means you're getting $0.90 of work for every $1.00 spent. <em>The most predictive EVMS metric — CPI rarely improves significantly once past 20% complete.</em></div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-label">Composite Efficiency</div>
+      <div class="formula-name">Critical Ratio (CR)</div>
+      <div class="formula-equation">CR = CPI × SPI</div>
+      <div class="formula-desc">Combines both efficiency indices. CR below 0.80 typically triggers a formal management review. Useful for quick triage when both cost and schedule are trending negative.</div>
+    </div>
+    <div class="formula-card">
+      <div class="formula-label">Budget Baseline</div>
+      <div class="formula-name">Budget at Completion (BAC)</div>
+      <div class="formula-equation">BAC = Total authorized budget</div>
+      <div class="formula-desc">The total approved budget for the entire scope of work. BAC is set through the PMB and can only be changed through formal re-baseline or OTB/OTS processes. All forecasting anchors to BAC.</div>
+    </div>
+    <div class="formula-card critical">
+      <div class="formula-label">Forward Forecast</div>
+      <div class="formula-name">Estimate to Complete (ETC)</div>
+      <div class="formula-equation">ETC = EAC − AC</div>
+      <div class="formula-desc">The expected cost to finish all remaining work from today forward. ETC is the PM's forward-looking commitment — it must be grounded in a credible plan, not arithmetic alone. <strong>CAMs own their ETCs.</strong> An ETC that diverges significantly from (BAC − EV) ÷ CPI demands justification. Watch for ETCs that are consistently optimistic period over period — that is a data integrity red flag.</div>
+    </div>
+    <div class="formula-card critical">
+      <div class="formula-label">Total Program Forecast</div>
+      <div class="formula-name">Estimate at Completion (EAC)</div>
+      <div class="formula-equation">EAC = AC + ETC</div>
+      <div class="formula-desc">The PM's current best estimate of total program cost at completion. EAC = AC (what's been spent) + ETC (what remains). It is not a single number — it should be calculated using multiple methods (CPI-based, management plan, composite) and triangulated for credibility. <strong>EAC is the most scrutinized metric in any program review.</strong> The spread between your reported EAC and the statistical EAC (BAC ÷ CPI) is your credibility exposure.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">The EVMS Golden Rule for Program Managers</div>
+    <p>EVMS is only as good as the data going in. Garbage PMB = garbage metrics. Your primary job as a PM is to ensure: (1) work is being earned accurately against measurable criteria, not subjective "feels like 50% done," (2) actuals are posting to the correct WBS, and (3) your CAMs are reporting reality, not optimism. The math is simple — the discipline is hard.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 2: EAC METHODS                       -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="eac" class="section">
+  <div class="section-title">EAC <span>Methods</span></div>
+  <p class="section-lead">Estimate at Completion (EAC) is the PM's forecast of total program cost. There is no single "right" EAC — you choose the method based on the reliability of your CPI, the nature of remaining work, and what the data is telling you. Using multiple methods and comparing them is best practice.</p>
+
+  <div class="eac-grid">
+    <div class="eac-card">
+      <div class="eac-card-header">
+        <span class="eac-method-num">01</span>
+        <span class="eac-tag">Most Common · Default</span>
+      </div>
+      <h3>CPI-Based (Statistical)</h3>
+      <div class="eac-formula">EAC = BAC ÷ CPI</div>
+      <p style="font-size:13px; color:rgba(248,244,238,0.65); line-height:1.5;">Assumes past cost efficiency will continue for all remaining work. Research by Christensen (1993) and DOD studies show this is the most accurate predictor on programs past 20% complete — more accurate than most re-estimates.</p>
+      <div class="eac-when">
+        <strong>Use when:</strong> CPI has been stable for 2+ reporting periods; no major scope changes planned; program is past 20% complete; you want a statistically defensible floor.
+      </div>
+    </div>
+    <div class="eac-card">
+      <div class="eac-card-header">
+        <span class="eac-method-num">02</span>
+        <span class="eac-tag">Optimistic · Management Direction</span>
+      </div>
+      <h3>Remaining Work at Budget Rate</h3>
+      <div class="eac-formula">EAC = AC + (BAC − EV)</div>
+      <p style="font-size:13px; color:rgba(248,244,238,0.65); line-height:1.5;">Assumes all remaining work will be accomplished at the budgeted rate (CPI = 1.0 going forward). Often called the "management plan" EAC — it reflects intent to recover.</p>
+      <div class="eac-when">
+        <strong>Use when:</strong> Overruns were caused by a one-time anomaly now resolved; there is a credible recovery plan; early in program where CPI isn't yet reliable. <em>Be careful — this is often over-optimistic.</em>
+      </div>
+    </div>
+    <div class="eac-card">
+      <div class="eac-card-header">
+        <span class="eac-method-num">03</span>
+        <span class="eac-tag">Composite · Balanced</span>
+      </div>
+      <h3>CPI + SPI Weighted</h3>
+      <div class="eac-formula">EAC = AC + [(BAC − EV) ÷ (CPI × SPI)]</div>
+      <p style="font-size:13px; color:rgba(248,244,238,0.65); line-height:1.5;">Accounts for both cost and schedule efficiency — recognizes that schedule pressure often drives additional cost. Useful when schedule recovery is driving inefficiency.</p>
+      <div class="eac-when">
+        <strong>Use when:</strong> Both CPI and SPI are unfavorable; schedule compression is generating cost; you want a more conservative forecast than CPI-only; responding to a customer or IPT inquiry.
+      </div>
+    </div>
+    <div class="eac-card">
+      <div class="eac-card-header">
+        <span class="eac-method-num">04</span>
+        <span class="eac-tag">Bottom-Up · Most Rigorous</span>
+      </div>
+      <h3>CAM Re-Estimate (ETC)</h3>
+      <div class="eac-formula">EAC = AC + ETC (fresh estimate)</div>
+      <p style="font-size:13px; color:rgba(248,244,238,0.65); line-height:1.5;">Control Account Managers re-estimate all remaining work from scratch. The ETC is a true bottoms-up estimate independent of past performance. Most credible — also most labor-intensive.</p>
+      <div class="eac-when">
+        <strong>Use when:</strong> Significant scope changes have occurred; technical approach changed; major re-baseline underway; program is early stage (&lt;20%) and statistical methods aren't reliable; customer demands justification.
+      </div>
+    </div>
+    <div class="eac-card">
+      <div class="eac-card-header">
+        <span class="eac-method-num">05</span>
+        <span class="eac-tag">Worst Case · Risk Assessment</span>
+      </div>
+      <h3>EAC at Maximum (Pessimistic)</h3>
+      <div class="eac-formula">EAC = AC + [(BAC − EV) ÷ Min(CPI, SPI)]</div>
+      <p style="font-size:13px; color:rgba(248,244,238,0.65); line-height:1.5;">Uses the worst of CPI or SPI as the efficiency denominator. Produces the most conservative forecast — useful for risk reserve analysis and executive scenario planning.</p>
+      <div class="eac-when">
+        <strong>Use when:</strong> Preparing risk scenarios for leadership; contract has cost-plus exposure; program is in recovery and you want to bound the risk. <em>Rarely reported as primary EAC — used internally.</em>
+      </div>
+    </div>
+    <div class="eac-card">
+      <div class="eac-card-header">
+        <span class="eac-method-num">06</span>
+        <span class="eac-tag">Insight Tool · Feasibility Check</span>
+      </div>
+      <h3>TCPI — To Complete Performance Index</h3>
+      <div class="eac-formula">TCPI(BAC) = (BAC − EV) ÷ (BAC − AC)</div>
+      <div class="eac-formula" style="margin-top:4px;">TCPI(EAC) = (BAC − EV) ÷ (EAC − AC)</div>
+      <p style="font-size:13px; color:rgba(248,244,238,0.65); line-height:1.5; margin-top:8px;">TCPI is the cost efficiency needed on ALL remaining work to hit your target. Not an EAC itself — a feasibility test. If TCPI &gt; 1.10, recovery is statistically improbable.</p>
+      <div class="eac-when">
+        <strong>Use when:</strong> Evaluating whether a recovery plan is achievable; presenting EAC credibility to customer or PMO; establishing if re-baseline is necessary.
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">The EAC Range Strategy — What Sophisticated PMs Do</div>
+    <p>Never present a single EAC as if it's the truth. Present a range: <strong>Low EAC</strong> (Method 02 — recovery plan), <strong>Statistical EAC</strong> (Method 01 — CPI-based, most defensible), and <strong>High EAC</strong> (Method 03 or 05 — risk scenario). Then use TCPI to validate whether the recovery scenario is achievable. The gap between your reported EAC and the CPI-based EAC is your credibility exposure — if they're wildly different and you can't explain why, you have a problem in a CAR or CPR review.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 3: INTERPRETATION                    -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="interpret" class="section">
+  <div class="section-title">Data <span>Interpretation</span></div>
+  <p class="section-lead">Raw EVMS numbers are meaningless without context. Here's how to read what the data is actually telling you — and what decisions each scenario demands.</p>
+
+  <!-- CPI/SPI matrix -->
+  <div style="font-family:'Playfair Display',serif; font-size:18px; color:var(--cream); margin-bottom:8px;">The CPI / SPI <span style="color:var(--gold);">Decision Matrix</span></div>
+  <p style="font-size:13px; color:rgba(248,244,238,0.6); margin-bottom:20px;">Every combination of CPI and SPI signals a different program condition and demands different PM action.</p>
+
+  <table class="interp-table">
+    <thead>
+      <tr>
+        <th>CPI</th>
+        <th>SPI</th>
+        <th>Status</th>
+        <th>What It Means</th>
+        <th>PM Action Required</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>&gt; 1.0</td>
+        <td>&gt; 1.0</td>
+        <td><span class="status-pill pill-green">Healthy</span></td>
+        <td>Under budget, ahead of schedule. Ideal state. <em>Verify — is earning being claimed correctly? Overly optimistic EV is a known risk.</em></td>
+        <td>Validate EV accuracy. Maintain PMB integrity. Consider whether schedule margin can be converted to cost reserve.</td>
+      </tr>
+      <tr>
+        <td>&gt; 1.0</td>
+        <td>&lt; 1.0</td>
+        <td><span class="status-pill pill-amber">Watch</span></td>
+        <td>Under budget, but behind schedule. Scope deferred, work stretched out. Cost efficiency may be false — work is being pushed right, not eliminated.</td>
+        <td>Investigate if schedule variance is due to deferred scope. Evaluate if cost savings will evaporate when deferred work executes. Develop schedule recovery plan. Monitor SPI trend.</td>
+      </tr>
+      <tr>
+        <td>&lt; 1.0</td>
+        <td>&gt; 1.0</td>
+        <td><span class="status-pill pill-amber">Watch</span></td>
+        <td>Over budget, but ahead of schedule. Burning money faster than planned to maintain schedule. Unsustainable without intervention.</td>
+        <td>Analyze cost drivers — are resources being over-applied? Evaluate if schedule acceleration is actually required. Project forward: at current CPI, what is EAC? Brief leadership.</td>
+      </tr>
+      <tr>
+        <td>&lt; 1.0</td>
+        <td>&lt; 1.0</td>
+        <td><span class="status-pill pill-red">Critical</span></td>
+        <td>Over budget AND behind schedule. Dual negative. Program is in distress. This combination is statistically sticky — programs rarely self-recover without intervention.</td>
+        <td>Immediate management escalation. Root cause analysis. CAM-level deep dives. Re-estimate EAC bottoms-up. Evaluate re-baseline. Engage customer per contract requirements. Develop recovery plan with owner, action items, and dates.</td>
+      </tr>
+      <tr>
+        <td>= 1.0</td>
+        <td>= 1.0</td>
+        <td><span class="status-pill pill-blue">On Track</span></td>
+        <td>Performing exactly to plan. Verify data quality — perfect performance is rare. More often signals data quality issues or gaming.</td>
+        <td>Validate data sources. Ensure actuals are posting correctly. Confirm EV is being earned against real completion criteria, not estimates.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Reading thresholds -->
+  <div style="font-family:'Playfair Display',serif; font-size:18px; color:var(--cream); margin-bottom:8px; margin-top:12px;">Performance <span style="color:var(--gold);">Threshold Thresholds</span></div>
+  <p style="font-size:13px; color:rgba(248,244,238,0.6); margin-bottom:20px;">Industry standards, DCMA, and contract requirements establish these bands. Know your thresholds — your contract may specify tighter ones.</p>
+
+  <div class="flag-grid">
+    <div class="flag-card red">
+      <h4>🚨 Critical Threshold</h4>
+      <ul>
+        <li>CPI &lt; 0.85 or SPI &lt; 0.85</li>
+        <li>VAC exceeds management reserve</li>
+        <li>TCPI &gt; 1.10 for recovery scenario</li>
+        <li>EAC exceeds EAC at completion by &gt;10%</li>
+        <li>CV exceeds 10% of BAC</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>Action:</strong> Formal corrective action required. CPR Submission, IPMR report, customer notification likely required per contract.</p>
+    </div>
+    <div class="flag-card amber">
+      <h4>⚠️ Watch/Warning Threshold</h4>
+      <ul>
+        <li>CPI or SPI between 0.85–0.95</li>
+        <li>EAC trending upward 2+ periods</li>
+        <li>SV or CV trending negative</li>
+        <li>CAM re-estimates diverging from statistical EAC</li>
+        <li>TCPI approaching 1.05–1.10</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>Action:</strong> Elevated monitoring. CAM deep dives. Brief PM and PMO. Prepare recovery options. Document in IPR.</p>
+    </div>
+    <div class="flag-card green">
+      <h4>✓ Healthy Zone</h4>
+      <ul>
+        <li>CPI and SPI both &gt; 0.95</li>
+        <li>EAC stable or trending favorable</li>
+        <li>TCPI feasible (&lt;1.05 for BAC case)</li>
+        <li>VAC within management reserve</li>
+        <li>Consistent EV earning methodology</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>Action:</strong> Maintain PMB discipline. Continue monthly CAR reporting cycle. Monitor for early warning signals.</p>
+    </div>
+  </div>
+
+  <!-- Variance Analysis -->
+  <div style="font-family:'Playfair Display',serif; font-size:18px; color:var(--cream); margin-bottom:16px; margin-top:8px;">Variance <span style="color:var(--gold);">Analysis FAQs</span></div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      Why does SV go to zero at completion even if I finished late?
+      <span class="accordion-arrow">▾</span>
+    </div>
+    <div class="accordion-body">
+      Because SV = EV − PV. At project completion, EV = BAC (all work is earned) and PV = BAC (all work was planned). So SV = BAC − BAC = 0. This is a fundamental limitation of SV as a schedule tool — it masks late delivery. <strong>This is why SPI alone is insufficient for schedule management.</strong> You must track physical schedule (IMS milestones, critical path) in parallel. Some organizations use Earned Schedule (ES) methodology to address this limitation, which maps earned value against time rather than budget.
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      What does it mean when CPI keeps declining month over month?
+      <span class="accordion-arrow">▾</span>
+    </div>
+    <div class="accordion-body">
+      A declining CPI trend is the most dangerous signal in EVMS. Research shows that <strong>CPI rarely improves significantly after the 20% completion point.</strong> If CPI has been 0.92, 0.90, 0.87 over the last three periods, the statistical EAC (BAC ÷ CPI) is becoming increasingly unfavorable — and it's likely accurate. A declining CPI can indicate:
+      <ul>
+        <li>Persistent technical challenges burning more labor than estimated</li>
+        <li>Scope growth that hasn't been formally authorized or repriced</li>
+        <li>Poor EV earning methodology (over-claiming early)</li>
+        <li>Labor rate variances (actuals higher than the rate used in the budget)</li>
+        <li>Subcontractor cost growth flowing through to actuals</li>
+      </ul>
+      <strong>PM action:</strong> Identify the specific WBS elements driving CPI degradation. Separate controllable from uncontrollable variance. Determine if recovery is feasible before presenting a "management plan" EAC that diverges significantly from the statistical EAC.
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      What is VAC and why does it matter more than CV?
+      <span class="accordion-arrow">▾</span>
+    </div>
+    <div class="accordion-body">
+      <strong>VAC (Variance at Completion) = BAC − EAC.</strong> While CV tells you where you are today, VAC tells you where you're projected to finish. A negative VAC means your EAC exceeds your BAC — you're forecasting an overrun. 
+      <ul>
+        <li><strong>If VAC is negative and small:</strong> May be absorbable in management reserve (MR). Coordinate with the PMO on MR draw-down authority.</li>
+        <li><strong>If VAC exceeds MR:</strong> You have an overrun that requires either re-baseline, contract mod, or customer disclosure depending on contract type.</li>
+        <li><strong>If VAC changes significantly month to month:</strong> Your EAC methodology is inconsistent — investigate CAM-level estimating.</li>
+      </ul>
+      VAC is typically the metric your program executive and customer watch most closely. Own it, understand it, and be prepared to explain it at any IPR.
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      How do I know if my EAC is credible?
+      <span class="accordion-arrow">▾</span>
+    </div>
+    <div class="accordion-body">
+      Use TCPI as your credibility test. Calculate <strong>TCPI(EAC) = (BAC − EV) ÷ (EAC − AC)</strong>. This tells you the cost efficiency you must achieve on ALL remaining work to hit your reported EAC. Rules of thumb:
+      <ul>
+        <li><strong>TCPI ≤ 1.0:</strong> Achievable — you're claiming improvement over past performance, but it's not unreasonable</li>
+        <li><strong>TCPI 1.01–1.05:</strong> Ambitious but potentially achievable with corrective action</li>
+        <li><strong>TCPI 1.05–1.10:</strong> Very difficult — requires significant efficiency improvement. DCMA will challenge this.</li>
+        <li><strong>TCPI &gt; 1.10:</strong> Statistically improbable. Your EAC is likely understated. Expect customer challenge.</li>
+      </ul>
+      If your TCPI(EAC) is &gt; 1.10 but your current CPI is 0.88, you're essentially claiming your team will instantly become 25% more efficient for the rest of the program. That's not a plan — it's a hope. The CPI-based EAC is more credible.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 4: PM DECISIONS                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="decisions" class="section">
+  <div class="section-title">PM <span>Decision Framework</span></div>
+  <p class="section-lead">EVMS doesn't make decisions — PMs do. Here's the systematic approach to managing EAC and responding to what the data is telling you.</p>
+
+  <div class="decision-flow">
+
+    <div class="decision-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Validate the Data Before Acting</h3>
+        <p>EVMS is only meaningful if the underlying data is clean. Before responding to any adverse variance, confirm: (1) Are actuals posting to the correct WBS elements? (2) Is EV being earned against measurable criteria or subjective estimates? (3) Have subcontractor actuals flowed through? (4) Are labor charges current? Bad data generates false variances — the worst thing a PM can do is take corrective action based on a data error.</p>
+        <div class="step-actions">
+          <span class="action-chip">Verify AC posting accuracy</span>
+          <span class="action-chip">Confirm EV earning method</span>
+          <span class="action-chip">Check subcontractor data currency</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Identify the Root Cause — Not the Symptom</h3>
+        <p>CPI of 0.88 is a symptom, not a cause. Drill down to the control account level to identify what is actually driving the variance. Is it a single problematic WBS element or systemic? Is it labor hours, labor rates, material cost growth, or overtime burn? Is it limited to one CAM or enterprise-wide? Variance analysis at the control account level is the only way to develop meaningful corrective action. You must separate: <strong>Technical variance</strong> (more work than estimated) vs. <strong>Estimating variance</strong> (bad baseline) vs. <strong>Efficiency variance</strong> (execution inefficiency).</p>
+        <div class="step-actions">
+          <span class="action-chip">Control account deep dive</span>
+          <span class="action-chip">CAM 1-on-1 reviews</span>
+          <span class="action-chip red">Root cause, not symptoms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Develop a Realistic EAC Range</h3>
+        <p>Calculate EAC using at least three methods: statistical (CPI-based), management plan (remaining work at budget), and composite (CPI×SPI). The gap between them is your decision space. Then validate with TCPI — is your planned EAC achievable? If CAMs are submitting ETC estimates that produce an EAC significantly lower than the CPI-based EAC, those estimates need to be challenged and justified. Document your rationale for the reported EAC.</p>
+        <div class="step-actions">
+          <span class="action-chip">EAC Method 01 — CPI baseline</span>
+          <span class="action-chip">EAC Method 02 — recovery case</span>
+          <span class="action-chip">TCPI feasibility check</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Evaluate Recovery Options</h3>
+        <p>Before escalating or reporting an overrun, determine if recovery is feasible. Recovery levers include: (a) Scope reduction/negotiation — remove low-value requirements; (b) Resource optimization — replace costly resources with less expensive alternatives for remaining work; (c) Process improvement — identify rework loops that can be eliminated; (d) Subcontract renegotiation — if subs are overrunning; (e) Schedule extension request — buying schedule to reduce overtime-driven cost. For each lever, quantify the cost impact and model the resulting EAC. If no lever gets TCPI below 1.10, recovery to BAC is improbable — be honest about this.</p>
+        <div class="step-actions">
+          <span class="action-chip">Model each recovery lever</span>
+          <span class="action-chip">Quantify impact per lever</span>
+          <span class="action-chip red">Assess TCPI feasibility</span>
+          <span class="action-chip">Document trade space</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>Make the Management Reserve Decision</h3>
+        <p>Management Reserve (MR) is budget held outside the PMB for unknown-unknown risks. Drawing MR is appropriate when you have a legitimate scope growth or risk realization — not to mask performance issues. Know your MR draw-down authority: Does the PM authorize MR use, or does it require PMO or customer approval? Document every MR draw with the specific risk event, the WBS element receiving the budget, and the resulting impact on remaining MR. <em>Never draw MR to close a performance overrun without a corresponding plan change — that is a data integrity violation.</em></p>
+        <div class="step-actions">
+          <span class="action-chip">Confirm MR draw authority</span>
+          <span class="action-chip green">Document risk event trigger</span>
+          <span class="action-chip red">Do not mask performance</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h3>Determine if Re-Baseline is Warranted</h3>
+        <p>Re-baseline (Over Target Baseline / OTB or Over Target Schedule / OTS) is a last resort — not a routine management tool. It requires customer consent and formal CDRL/DID procedures on government contracts. Re-baseline is appropriate when: (a) the current PMB no longer reflects executable scope; (b) cumulative variances have made the baseline meaningless for management control; (c) there has been authorized scope change that can't be accommodated by replanning within BAC. Before initiating re-baseline, you must demonstrate that performance-based corrective actions have been exhausted and the overrun is attributable to specific, documented causes.</p>
+        <div class="step-actions">
+          <span class="action-chip red">Last resort only</span>
+          <span class="action-chip">Document exhausted options</span>
+          <span class="action-chip">Customer coordination required</span>
+          <span class="action-chip">Follow CDRL/DID procedures</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <h3>Communicate With Precision and Confidence</h3>
+        <p>Report what the data says — not what you wish it said. A credible PM presents the full EAC range, explains the basis for the reported EAC, quantifies recovery actions being taken, identifies risks to the recovery scenario, and states what triggering events would change the forecast. Customer and program executives can handle bad news — what they cannot handle is being surprised. Proactive, data-grounded communication is the mark of a program executive. Always tie your EVMS narrative to: What happened, Why it happened, What we're doing about it, and What it means for final cost.</p>
+        <div class="step-actions">
+          <span class="action-chip green">Present full EAC range</span>
+          <span class="action-chip">Explain recovery basis</span>
+          <span class="action-chip">No surprises policy</span>
+          <span class="action-chip">What / Why / Action / Impact</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 5: CALCULATOR                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="calculator" class="section">
+  <div class="section-title">EVMS <span>Live Calculator</span></div>
+  <p class="section-lead">Enter your program's current data points. All metrics and EAC estimates will calculate automatically with interpretation.</p>
+
+  <div class="calc-wrapper">
+    <div class="calc-grid">
+      <div class="calc-field">
+        <label>BAC ($)</label>
+        <input type="number" id="bac" placeholder="e.g. 10000000" value="10000000">
+      </div>
+      <div class="calc-field">
+        <label>PV ($)</label>
+        <input type="number" id="pv" placeholder="e.g. 4500000" value="4500000">
+      </div>
+      <div class="calc-field">
+        <label>EV ($)</label>
+        <input type="number" id="ev" placeholder="e.g. 4200000" value="4200000">
+      </div>
+      <div class="calc-field">
+        <label>AC ($)</label>
+        <input type="number" id="ac" placeholder="e.g. 4800000" value="4800000">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">▶ Calculate EVMS Metrics</button>
+
+    <div class="calc-results" id="results">
+      <!-- populated by JS -->
+    </div>
+    <div id="calc-narrative" style="margin-top:24px; padding:20px; background:rgba(255,255,255,0.03); border:1px solid var(--charcoal-light); border-radius:4px; font-size:14px; color:rgba(248,244,238,0.75); line-height:1.7; display:none;"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 6: PM CHECKLIST                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="checklist" class="section">
+  <div class="section-title">PM <span>Monthly EVMS Checklist</span></div>
+  <p class="section-lead">What a program manager should be doing every reporting cycle to actively manage EAC and maintain data integrity. Click items to check them off.</p>
+
+  <ul class="checklist" id="pm-checklist">
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Verify data currency:</strong> Confirm actuals have posted, labor timecards are current, subcontractor invoices are loaded, and EV has been earned against completed work — not based on percent feel.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Calculate and trend CPI/SPI:</strong> Not just this month's values — plot the 3-month and 6-month trend. A declining CPI trend is more alarming than a single period's value. Know your direction of travel.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoor="round"/></svg></div>
+      <div class="check-text"><strong>Update EAC using multiple methods:</strong> Calculate CPI-based EAC (BAC ÷ CPI), management plan EAC (AC + remaining at budget), and composite EAC. Note the spread. If your reported EAC is significantly below the CPI-based EAC, document the justification.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Run TCPI feasibility check:</strong> Calculate TCPI(EAC) against your reported EAC. If TCPI &gt; 1.05, identify specific actions that will achieve that efficiency. If TCPI &gt; 1.10, escalate or revise EAC.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Conduct CAM variance reviews:</strong> Review any control account with CV or SV exceeding your threshold (typically ±10% or ±$X). Each CAM should provide a root cause, corrective action with owner and due date, and ETC update.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Prepare variance analysis narrative:</strong> For the CPR/IPMR or internal IPR: document top 5 cost and schedule variances, root cause for each, and corrective action plan. This is the most visible PM deliverable on an EVMS contract.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Review MR and UB status:</strong> Check remaining management reserve balance against projected EAC risk. Verify undistributed budget (UB) is being allocated and isn't being used as a hidden reserve. Confirm MR draw authority hasn't been exceeded.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Cross-check IMS alignment:</strong> Verify that schedule variances in EVMS align with milestone slippage in the IMS. EVMS SV in dollars should correlate directionally with your critical path delays. Disconnects indicate data quality issues.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Update risk register linkage:</strong> Identify which risks are now materializing and contributing to EVMS variances. Activate risk mitigation plans where applicable. Confirm risk cost estimates align with observed CV.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Brief program leadership and customer (as required):</strong> For contracts requiring CPR/IPMR, ensure submission is on time and defensible. For internal reporting, brief EAC trends and any approaching threshold violations before they become surprises.</div>
+    </li>
+    <li>
+      <div class="check-icon" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-text"><strong>Document replanning actions:</strong> Any authorized changes to work scope, budget transfers between control accounts, or IMS logic changes must be documented with effective date, rationale, and impact. PMB change log must be current.</div>
+    </li>
+  </ul>
+
+  <div class="callout" style="margin-top:0;">
+    <div class="callout-title">The 20% Rule — Commit This to Memory</div>
+    <p>Research consistently shows that <strong>CPI stabilizes (within ±10%) after a program is 20% complete.</strong> This means that by the time you're 20% through, your current CPI is a statistically reliable predictor of final performance. If CPI is 0.88 at 20% complete, the CPI-based EAC is your most credible forecast — and recovery to 1.0 for the remaining 80% is very unlikely without fundamental program restructuring. The PM who understands this rule never gets caught defending an unrealistic EAC in a program review.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="guide-footer">
+  <div class="logo-zone logo-zone-footer" title="Place Greater Ambitions LLC logo here"><a href='https://postimg.cc/bSYhPL8Q' target='_blank'><img src='https://i.postimg.cc/bSYhPL8Q/rev-Screenshot-2026-04-27-at-10-23-19-AM.png' border='0' alt='rev-Screenshot-2026-04-27-at-10-23-19-AM'></a></div>
+  <span>Diagnose. Build. Execute. Scale.</span>
+  
+  <div class="footer-copy">
+      © 2025 Greater Ambitions LLC. All Rights Reserved.<br>
+      Dr. Minina Johnson, DBA, PMP, CSM · Founder & Strategic Execution Architect<br>
+      Diversity-Owned · Tucson, AZ
+    </div>
+</div>
+
+<script>
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    header.classList.toggle('open');
+    body.classList.toggle('open');
+  }
+
+  function toggleCheck(icon) {
+    icon.classList.toggle('checked');
+  }
+
+  function fmt(n) {
+    if (isNaN(n) || !isFinite(n)) return 'N/A';
+    if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
+    if (Math.abs(n) >= 1e3) return '$' + (n/1e3).toFixed(1) + 'K';
+    return '$' + n.toFixed(0);
+  }
+
+  function fmtIdx(n) {
+    if (isNaN(n) || !isFinite(n)) return 'N/A';
+    return n.toFixed(3);
+  }
+
+  function getClass(val, goodAbove1) {
+    if (goodAbove1) {
+      if (val >= 0.95) return 'good';
+      if (val >= 0.85) return 'warn';
+      return 'bad';
+    } else {
+      if (val >= 0) return 'good';
+      if (val >= -0.05 * parseFloat(document.getElementById('bac').value)) return 'warn';
+      return 'bad';
+    }
+  }
+
+  function calculate() {
+    const bac = parseFloat(document.getElementById('bac').value) || 0;
+    const pv  = parseFloat(document.getElementById('pv').value)  || 0;
+    const ev  = parseFloat(document.getElementById('ev').value)  || 0;
+    const ac  = parseFloat(document.getElementById('ac').value)  || 0;
+
+    const sv  = ev - pv;
+    const cv  = ev - ac;
+    const spi = pv !== 0 ? ev / pv : 0;
+    const cpi = ac !== 0 ? ev / ac : 0;
+
+    const eac1 = cpi !== 0 ? bac / cpi : 0;
+    const eac2 = ac + (bac - ev);
+    const eac3 = (cpi * spi) !== 0 ? ac + ((bac - ev) / (cpi * spi)) : 0;
+
+    const vac  = bac - eac1;
+    const tcpiBAC = (bac - ac) !== 0 ? (bac - ev) / (bac - ac) : 0;
+    const tcpiEAC = (eac1 - ac) !== 0 ? (bac - ev) / (eac1 - ac) : 0;
+
+    const pctComplete = bac !== 0 ? (ev / bac * 100) : 0;
+
+    const metrics = [
+      { label: 'SV (Schedule Variance)', val: fmt(sv), cls: sv >= 0 ? 'good' : (sv > -0.05*bac ? 'warn' : 'bad'), interp: sv >= 0 ? 'Ahead of schedule (in $ value)' : 'Behind schedule — investigate IMS', bar: Math.min(100, 50 + sv/bac*200), barColor: sv >= 0 ? '#2ecc71' : '#e74c3c' },
+      { label: 'CV (Cost Variance)', val: fmt(cv), cls: cv >= 0 ? 'good' : (cv > -0.05*bac ? 'warn' : 'bad'), interp: cv >= 0 ? 'Under budget — favorable' : 'Over budget — action required', bar: Math.min(100, 50 + cv/bac*200), barColor: cv >= 0 ? '#2ecc71' : '#e74c3c' },
+      { label: 'SPI', val: fmtIdx(spi), cls: spi >= 0.95 ? 'good' : (spi >= 0.85 ? 'warn' : 'bad'), interp: spi >= 0.95 ? 'Schedule on/ahead of plan' : spi >= 0.85 ? 'Schedule degraded — watch' : 'Schedule critical — escalate', bar: Math.min(100, spi * 100), barColor: spi >= 0.95 ? '#2ecc71' : (spi >= 0.85 ? '#f1c40f' : '#e74c3c') },
+      { label: 'CPI', val: fmtIdx(cpi), cls: cpi >= 0.95 ? 'good' : (cpi >= 0.85 ? 'warn' : 'bad'), interp: cpi >= 0.95 ? 'Cost on/under budget' : cpi >= 0.85 ? 'Cost efficiency degraded' : 'Cost critical — immediate action', bar: Math.min(100, cpi * 100), barColor: cpi >= 0.95 ? '#2ecc71' : (cpi >= 0.85 ? '#f1c40f' : '#e74c3c') },
+      { label: '% Complete (EV/BAC)', val: pctComplete.toFixed(1) + '%', cls: 'good', interp: pctComplete < 20 ? 'Early stage — CPI not yet reliable' : pctComplete < 80 ? 'Mid-execution — CPI trending predictive' : 'Late stage — CPI highly predictive', bar: pctComplete, barColor: '#A87605' },
+      { label: 'EAC (CPI-Based)', val: fmt(eac1), cls: eac1 <= bac ? 'good' : (eac1 <= bac*1.1 ? 'warn' : 'bad'), interp: 'Most statistically reliable forecast', bar: Math.min(100, bac/eac1*100), barColor: eac1 <= bac ? '#2ecc71' : (eac1 <= bac*1.1 ? '#f1c40f' : '#e74c3c') },
+      { label: 'EAC (Recovery Plan)', val: fmt(eac2), cls: eac2 <= bac ? 'good' : (eac2 <= bac*1.05 ? 'warn' : 'bad'), interp: 'Optimistic — assumes recovery to budget rate', bar: Math.min(100, bac/eac2*100), barColor: eac2 <= bac ? '#2ecc71' : '#f1c40f' },
+      { label: 'EAC (CPI×SPI)', val: fmt(eac3), cls: eac3 <= bac*1.1 ? 'warn' : 'bad', interp: 'Conservative — accounts for schedule pressure', bar: Math.min(100, bac/eac3*100), barColor: '#f1c40f' },
+      { label: 'VAC (Variance at Completion)', val: fmt(vac), cls: vac >= 0 ? 'good' : 'bad', interp: vac >= 0 ? 'Forecasting under BAC' : 'Forecasting overrun — review MR', bar: Math.min(100, 50 + vac/bac*200), barColor: vac >= 0 ? '#2ecc71' : '#e74c3c' },
+      { label: 'TCPI (vs BAC)', val: fmtIdx(tcpiBAC), cls: tcpiBAC <= 1.05 ? 'good' : (tcpiBAC <= 1.10 ? 'warn' : 'bad'), interp: tcpiBAC <= 1.0 ? 'Recovery achievable' : tcpiBAC <= 1.05 ? 'Ambitious but possible' : tcpiBAC <= 1.10 ? 'Very difficult — DCMA will challenge' : 'Statistically improbable', bar: Math.min(100, (1/tcpiBAC)*100), barColor: tcpiBAC <= 1.05 ? '#2ecc71' : (tcpiBAC <= 1.10 ? '#f1c40f' : '#e74c3c') },
+    ];
+
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = metrics.map(m => `
+      <div class="result-card">
+        <div class="result-label">${m.label}</div>
+        <div class="result-value ${m.cls}">${m.val}</div>
+        <div class="result-interp">${m.interp}</div>
+        <div class="result-bar"><div class="result-bar-fill" style="width:${Math.max(2,m.bar)}%; background:${m.barColor};"></div></div>
+      </div>
+    `).join('');
+
+    // Narrative
+    let status = '✓ Healthy';
+    let actions = [];
+    if (cpi < 0.85 || spi < 0.85) { status = '🚨 Critical'; }
+    else if (cpi < 0.95 || spi < 0.95) { status = '⚠️ Watch'; }
+    
+    if (cpi < 0.95) actions.push('Conduct CAM-level variance analysis to identify cost drivers');
+    if (spi < 0.95) actions.push('Cross-check IMS for milestone slippage; develop schedule recovery options');
+    if (tcpiBAC > 1.10) actions.push('TCPI exceeds 1.10 — EAC is likely understated; consider revising upward');
+    if (cpi < 0.85 && spi < 0.85) actions.push('Program is in dual negative — escalate to program leadership immediately');
+    if (pctComplete >= 20 && cpi < 0.95) actions.push('Past 20% complete — CPI is now a reliable predictor; the statistical EAC (' + fmt(eac1) + ') is your most defensible forecast');
+
+    const narrative = document.getElementById('calc-narrative');
+    narrative.style.display = 'block';
+    narrative.innerHTML = `
+      <strong style="color:var(--gold); font-size:15px;">Program Status: ${status}</strong><br><br>
+      <strong>EAC Range:</strong> ${fmt(eac2)} (recovery) → ${fmt(eac1)} (statistical) → ${fmt(eac3)} (conservative)<br>
+      <strong>BAC:</strong> ${fmt(bac)} | <strong>VAC:</strong> ${fmt(vac)} | <strong>% Complete:</strong> ${pctComplete.toFixed(1)}%<br><br>
+      ${actions.length > 0 ? '<strong style="color:var(--gold-light);">Recommended PM Actions:</strong><ul style="margin-top:8px; padding-left:18px;">' + actions.map(a => '<li style="margin-bottom:6px;">' + a + '</li>').join('') + '</ul>' : '<span style="color:#2ecc71;">Program metrics are within healthy range. Maintain discipline and monitor trends.</span>'}
+    `;
+  }
+
+  // Run on load with default values
+  window.onload = () => calculate();
+</script>
+</body>
+</html>
